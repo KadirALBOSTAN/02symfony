@@ -1,0 +1,10 @@
+{
+    "name": "apos/02symfony",
+    "authors": [
+        {
+            "name": "Kadir",
+            "email": "kadir.albostan@gmail.com"
+        }
+    ],
+    "require": {}
+}

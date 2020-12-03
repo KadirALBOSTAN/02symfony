@@ -11,10 +11,18 @@
     </head>
 
     <body>
+
+        <header>
+                {% block header %}
+                    {% include '_navbar.html.twig' %}
+                {% endblock %}
+        </header>
+
         {% block body %}{% endblock %}
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
+
     </body>
 </html>

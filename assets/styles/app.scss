@@ -1,7 +1,8 @@
 @import "~bootstrap/scss/bootstrap";
 
-$primary: #3580ee;
-$secondary: #ffed27;
+$primary: #8d8d8d;
+$secondary: #0732e0;
+$third: #FFFFFF;
 
 body {
     background-color: $primary;
@@ -16,5 +17,5 @@ body {
 }
 
 .nav-link {
-    color: $primary;
+    color: $third;
 }

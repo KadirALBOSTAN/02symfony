@@ -1,14 +1,20 @@
-<!doctype html>
+{# templates/program/show.html.twig #}
+{% extends 'base.html.twig' %}
+{% block title %}Série #{{ program.id }}{% endblock %}
 
-<html lang="en">
+{% block body %}
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Wild Series</title>
-    </head>
+    <div class="media">
+        <img class="align-self-start mr-3" src="{{program.poster}}" alt="{{ program.title }} poster">
+        <div class="media-body">
+            <h1 class="mt-0">{{ program.title }}</h1>
+            <p>{{ program.summary }}</p>
+            <p>Catégorie : {{ program.category.name }}</p>
+        </div>
+    </div>
 
-    <body>
-        <h1>Program {{ id }}</h1>
-    </body>
+    <a href="{{ path('program_index') }}">
+        Retour à la liste des programmes
+    </a>
 
-</html>
+{% endblock %}

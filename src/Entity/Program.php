@@ -6,9 +6,16 @@ use App\Repository\ProgramRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=ProgramRepository::class)
+ * @UniqueEntity(
+ *     fields={"title"},
+ *     message="ERREUR Ce titre a déjà été utilisé"
+ * )
  */
 class Program
 {
@@ -21,27 +28,38 @@ class Program
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le titre est obligatoire")
+     * @Assert\Length(max="255")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank(message= "Ne me laisse pas vide :(")
+     * @Assert\Regex(
+     *     pattern="/(Plus belle la vie)/",
+     *     match=false,
+     *     message="On parle de vraies séries ici"
+     * )
      */
     private $summary;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank()
      */
     private $poster;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="progams")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="programs")
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank()
      */
     private $category;
 
     /**
      * @ORM\OneToMany(targetEntity=Season::class, mappedBy="program")
+     * @Assert\NotBlank()
      */
     private $seasons;
 
@@ -49,6 +67,7 @@ class Program
     {
         $this->seasons = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -70,6 +89,7 @@ class Program
     public function getSummary(): ?string
     {
         return $this->summary;
+
     }
 
     public function setSummary(string $summary): self
@@ -98,7 +118,7 @@ class Program
 
     public function setCategory(?Category $category): self
     {
-        $this->Category = $category;
+        $this->category = $category;
 
         return $this;
     }

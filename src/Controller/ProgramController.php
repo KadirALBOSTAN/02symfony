@@ -34,6 +34,33 @@ Class ProgramController extends AbstractController
     }
 
     /**
+     * The controller for the category add form
+     *
+     * @Route("/new", name="new")
+     */
+    public function new(Request $request) : Response
+    {
+        $category = new Program();
+        $form = $this->createForm(ProgramType::class, $category);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            // Deal with the submitted data
+            // Get the Entity Manager
+            $entityManager = $this->getDoctrine()->getManager();
+            // Persist Category Object
+            $entityManager->persist($category);
+            // Flush the persisted object
+            $entityManager->flush();
+            // Finally redirect to categories list
+            return $this->redirectToRoute('program_index');
+        }
+        return $this->render('program/new.html.twig', [
+            "form" => $form->createView(),
+        ]);
+    }
+
+
+    /**
      * Getting a program by id
      *
      * @Route("/show/{id<^[0-9]+$>}", name="show")

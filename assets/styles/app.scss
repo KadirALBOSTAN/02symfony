@@ -19,3 +19,17 @@ body {
 .nav-link {
     color: $third;
 }
+
+.index {
+    justify-content: space-around;
+
+    & .program {
+        width: 500px;
+        margin-bottom: 20px;
+    }
+
+    & .poster {
+        width: 450px;
+        height: 800px;
+    }
+}

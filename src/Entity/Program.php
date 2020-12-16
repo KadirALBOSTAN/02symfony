@@ -3,20 +3,22 @@
 namespace App\Entity;
 
 use App\Repository\ProgramRepository;
-use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
+
 /**
- * @ORM\Entity(repositoryClass=ProgramRepository::class)
- * @UniqueEntity(
- *     fields={"title"},
- *     message="ERREUR Ce titre a déjà été utilisé"
+ * @ORM\Entity(repositoryClass="App\Repository\ProgramRepository")
+ * @UniqueEntity("title",
+ *          message="ce titre existe déjà"
  * )
  */
+
+
 class Program
 {
     /**
@@ -28,52 +30,33 @@ class Program
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le titre est obligatoire")
+     * @Assert\NotBlank(message="N'oublie pas le titre !")
      * @Assert\Length(max="255")
+     *
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank(message= "Ne me laisse pas vide :(")
+     * @Assert\NotBlank(message="N'oublie pas le résumé !")
      * @Assert\Regex(
-     *     pattern="/(Plus belle la vie)/",
+     *     pattern="/(plus belle la vie)/",
      *     match=false,
      *     message="On parle de vraies séries ici"
      * )
+     *
      */
     private $summary;
-
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\NotBlank()
      */
     private $poster;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="programs")
-     * @ORM\JoinColumn(nullable=false)
-     * @Assert\NotBlank()
+     * @ORM\ManyToOne (targetEntity="App\Entity\Category", inversedBy="programs")
+     * @ORM\JoinColumn (nullable=false)
      */
     private $category;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Season::class, mappedBy="program")
-     * @Assert\NotBlank()
-     */
-    private $seasons;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="programs")
-     */
-    private $actors;
-
-    public function __construct()
-    {
-        $this->seasons = new ArrayCollection();
-        $this->actors = new ArrayCollection();
-    }
-
 
     public function getId(): ?int
     {
@@ -95,7 +78,6 @@ class Program
     public function getSummary(): ?string
     {
         return $this->summary;
-
     }
 
     public function setSummary(string $summary): self
@@ -129,6 +111,24 @@ class Program
         return $this;
     }
 
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Season", mappedBy="program")
+     */
+    private $seasons;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Actor::class, mappedBy="programs")
+     */
+    private $actors;
+
+
+    public function __construct()
+    {
+        $this->seasons = new ArrayCollection();
+        $this->actors = new ArrayCollection();
+    }
+
     /**
      * @return Collection|Season[]
      */
@@ -137,25 +137,32 @@ class Program
         return $this->seasons;
     }
 
-    public function addSeason(Season $season): self
+    /**
+     * @param Season $season
+     * @return Program
+     */
+    public function addSeason(Program $season): self
     {
-        if (!$this->seasons->contains($season)) {
+        if (!$this->seasons->contains($season)){
             $this->seasons[] = $season;
             $season->setProgram($this);
         }
-
         return $this;
+
     }
 
-    public function removeSeason(Season $season): self
+    /**
+     * @param Season $season
+     * @return Program
+     */
+    public function removeSeason(Program $season): self
     {
-        if ($this->seasons->removeElement($season)) {
-            // set the owning side to null (unless already changed)
+        if ($this->seasons->contains($season)){
+            $this->seasons->removeElement($season);
             if ($season->getProgram() === $this) {
                 $season->setProgram(null);
             }
         }
-
         return $this;
     }
 
@@ -184,5 +191,13 @@ class Program
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Actor[]
+     */
+    public function getActor(): Collection
+    {
+        return $this->actors;
     }
 }

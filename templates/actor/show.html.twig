@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Acteurs{% endblock %}
+{% block title %}Acteur{% endblock %}
 
 {% block body %}
     <div class="container-fluid">
@@ -8,11 +8,11 @@
             <div class="media">
                 <div class="media-body">
                     <h1 class="mt-0">{{ actor.name }}</h1>
-                    <h2>Les séries dans lesquelles il joue :</h2>
+                    <h2>Ses séries :</h2>
                     <ul>
                         {% for program in actor.programs %}
                             <li>
-                                <a href="{{ path('program_show', {id: program.id}) }}">{{ program.title }}</a>
+                                <a href="{{ path('program_show', {slug: program.slug}) }}">{{ program.title }}</a>
                             </li>
                         {% endfor %}
                     </ul>

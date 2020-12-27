@@ -9,20 +9,20 @@
 {% endblock %}
 
 {% block body %}
-{# {{ dump(seasons) }} #}
-    <h1>Toutes les séries </h1>
+
+    <h1>Toutes les séries de la table Program</h1>
     <div class="container-fluid">
         <div class="row index">
             {% for program in programs %}
                 <div class="col-lg-4 program">
-                    <a href="{{ path("program_show", { id: program.id }) }}">
+                    <a href="{{ path("program_show", {slug: program.slug }) }}">
                         <img class="poster" src="{{ program.poster }}" alt="Affiche {{ program.title }}">
                     </a>
                     <div class="description">
                         <h2 class="title">{{ loop.index }}/ {{ program.title }}</h2>
                         <h3> Catégorie: {{ program.category.name }}</h3>
                         <p>{{ program.summary}}</p>
-                        <a href="{{ path("program_show", { id: program.id }) }}">
+                        <a href="{{ path("program_show", { slug: program.slug }) }}">
                             Voir la fiche
                         </a>
                     </div>
@@ -38,5 +38,6 @@
             Retour à l'acceuil
         </a>
     </div>
+
 
 {% endblock %}

@@ -38,6 +38,11 @@ class Episode
      */
     private $synopsis;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $slug;
+
     public function getId(): ?int
     {
         return $this->id;

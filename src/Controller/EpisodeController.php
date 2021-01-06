@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 
 /**
@@ -30,8 +32,9 @@ class EpisodeController extends AbstractController
 
     /**
      * @Route("/new", name="new", methods={"GET","POST"})
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function new(Request $request,  Slugify $slugify): Response
+    public function new(Request $request,  Slugify $slugify, MailerInterface $mailer): Response
     {
         $episode = new Episode();
         $form = $this->createForm(EpisodeType::class, $episode);
@@ -45,6 +48,21 @@ class EpisodeController extends AbstractController
 
             $entityManager->persist($episode);
             $entityManager->flush();
+
+            $season = $episode->getSeason();
+            $program = $season->getProgram();
+
+            $email = (new Email())
+                ->from($this->getParameter('mailer_from'))
+                ->to('d0850397c7-13f7d1@inbox.mailtrap.io')
+                ->subject('Un nouvel épisode t\'attends !')
+                ->html($this->renderView('episode/newEpisodeEmail.html.twig', [
+                    'episode' => $episode,
+                    'program' => $program,
+                    'season' => $season,
+                ]));
+
+            $mailer->send($email);
 
             return $this->redirectToRoute('episode_index');
         }

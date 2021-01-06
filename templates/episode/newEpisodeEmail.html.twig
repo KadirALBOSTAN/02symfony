@@ -1,0 +1,15 @@
+{% extends 'layout/email.html.twig' %}
+
+{% block title %}Un nouvel épisode t'attend!{% endblock %}
+
+{% block body %}
+
+        <h1>L'{{ episode.title }} de la série {{ program.title }}  est disponible</h1>
+
+        <p>Hé oh! Bonne nouvelle, l'épisode {{ program.title }}  de la saison {{ season.id }} de {{ program.slug }} a été ajouté sur ton site préféré Wild Series</p>
+
+        <p>Résumé : {{episode.synopsis }}</p>
+
+        <p> Ne perd plus de temps, et viens <a href="http://localhost:8000/programs/{{ program.slug }}/seasons/{{ season.id }}/episodes/{{ episode.slug }}"> voir l'épisode !</a></p>
+
+{% endblock %}

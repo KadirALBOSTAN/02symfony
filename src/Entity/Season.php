@@ -42,7 +42,7 @@ class Season
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=Episode::class, mappedBy="seasons")
+     * @ORM\OneToMany(targetEntity=Episode::class, mappedBy="season")
      */
     private $episodes;
 
